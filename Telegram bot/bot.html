@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Translation Service</title>
+</head>
+<body>
+    <h1>Translation Service</h1>
+    <textarea id="text-to-translate" placeholder="Enter text to translate"></textarea>
+    <select id="target-language">
+        <option value="en">English</option>
+        <option value="es">Spanish</option>
+        <option value="fr">French</option>
+        <option value="Hindi">Hindi</option>
+        <option value="Bengali">Bengali</option>
+        <option value="Nepali">Nepali</option>
+        <!-- Add more language options as needed -->
+    </select>
+    <button id="translate-button">Translate</button>
+    <p>Translated Text:</p>
+    <div id="translated-text"></div>
+    
+    <script>
+        document.getElementById("translate-button").addEventListener("click", function() {
+            const textToTranslate = document.getElementById("text-to-translate").value;
+            const targetLanguage = document.getElementById("target-language").value;
+
+            fetch("http://127.0.0.1:5000/translate", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "text": textToTranslate,
+                    "target_language": targetLanguage
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("translated-text").textContent = data.translation;
+            })
+            .catch(error => {
+                console.error("Translation error:", error);
+                document.getElementById("translated-text").textContent = "Error translating text.";
+            });
+        });
+    </script>
+</body>
+</html>
